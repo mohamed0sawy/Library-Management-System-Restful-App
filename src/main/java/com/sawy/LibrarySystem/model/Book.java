@@ -23,6 +23,7 @@ public class Book {
     private Long id;
 
     @NotBlank(message = "Title is mandatory")
+    @Size(min = 3, max = 100, message = "Title must be between 3 and 100 characters")
     private String title;
 
     @NotBlank(message = "ISBN is mandatory")

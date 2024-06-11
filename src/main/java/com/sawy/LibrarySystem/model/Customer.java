@@ -19,6 +19,7 @@ public class Customer {
     private Long id;
 
     @NotBlank(message = "Name is mandatory")
+    @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
     private String name;
 
     @Email(message = "Email should be valid")

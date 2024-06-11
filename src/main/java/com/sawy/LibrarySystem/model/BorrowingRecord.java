@@ -25,7 +25,7 @@ public class BorrowingRecord {
 
     @ManyToOne
     @JoinColumn(name = "book_id")
-    @JsonIgnoreProperties({"borrowingRecords", "author"})
+    @JsonIgnoreProperties({"borrowingRecords", "author", "authorID"})
     private Book book;
 
     @NotNull(message = "Customer ID is mandatory")
@@ -34,10 +34,10 @@ public class BorrowingRecord {
     @NotNull(message = "Book ID is mandatory")
     private Long bookID;
 
-    @PastOrPresent(message = "Borrow date cannot be in the future")
+//    @PastOrPresent(message = "Borrow date cannot be in the future")
     private LocalDate borrowDate;
 
-    @FutureOrPresent(message = "Return date cannot be in the past")
+//    @FutureOrPresent(message = "Return date cannot be in the past")
     private LocalDate returnDate;
 
     public BorrowingRecord(Customer customer, Book book, LocalDate borrowDate, LocalDate returnDate, Long customerID, Long bookID) {
@@ -47,5 +47,13 @@ public class BorrowingRecord {
         this.returnDate = returnDate;
         this.customerID = customerID;
         this.bookID = bookID;
+    }
+
+    @AssertTrue(message = "Return date must be after borrow date")
+    private boolean isReturnDateValid() {
+        if (borrowDate != null && returnDate != null) {
+            return returnDate.isAfter(borrowDate) || returnDate.isEqual(borrowDate);
+        }
+        return true;
     }
 }
