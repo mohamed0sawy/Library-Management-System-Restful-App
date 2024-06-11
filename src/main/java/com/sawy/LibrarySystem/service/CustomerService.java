@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,6 +17,7 @@ import java.util.Optional;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public Page<Customer> getAllCustomers(int page, int size, String sortBy, String sortOrder) {
         Sort.Direction direction = sortOrder.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
@@ -28,6 +30,7 @@ public class CustomerService {
     }
 
     public Customer createCustomer(Customer customer) {
+        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         return customerRepository.save(customer);
     }
 
