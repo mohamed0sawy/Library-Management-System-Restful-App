@@ -22,6 +22,13 @@ public class BookController {
                                                   @RequestParam(defaultValue = "id") String sortBy,
                                                   @RequestParam(defaultValue = "asc") String sortOrder) {
         Page<Book> books = bookService.getAllBooks(page, size, sortBy, sortOrder);
+        books.getContent().forEach(book -> {
+            book.setAuthorID(book.getAuthor().getId());
+            book.getBorrowingRecords().forEach(record -> {
+                record.setCustomerID(record.getCustomer().getId());
+                record.setBookID(record.getBook().getId());
+            });
+        });
         return ResponseEntity.ok(books);
     }
 

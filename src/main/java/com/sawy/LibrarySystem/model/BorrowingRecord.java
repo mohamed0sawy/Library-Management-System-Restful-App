@@ -1,5 +1,6 @@
 package com.sawy.LibrarySystem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -19,10 +20,12 @@ public class BorrowingRecord {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties({"borrowingRecords", "password"})
     private Customer customer;
 
     @ManyToOne
     @JoinColumn(name = "book_id")
+    @JsonIgnoreProperties({"borrowingRecords", "author"})
     private Book book;
 
     @NotNull(message = "Customer ID is mandatory")

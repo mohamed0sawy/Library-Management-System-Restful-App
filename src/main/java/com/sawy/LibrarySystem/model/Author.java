@@ -1,5 +1,7 @@
 package com.sawy.LibrarySystem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -29,6 +31,7 @@ public class Author {
     private String nationality;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"author", "borrowingRecords", "authorID"})
     private List<Book> books;
 
     public Author(String name, LocalDate birthDate, String nationality) {

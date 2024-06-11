@@ -23,6 +23,12 @@ public class CustomerController {
                                                           @RequestParam(defaultValue = "id") String sortBy,
                                                           @RequestParam(defaultValue = "asc") String sortOrder) {
         Page<Customer> customers = customerService.getAllCustomers(page, size, sortBy, sortOrder);
+        customers.getContent().forEach(customer -> {
+            customer.getBorrowingRecords().forEach(record -> {
+                record.setCustomerID(record.getCustomer().getId());
+                record.setBookID(record.getBook().getId());
+            });
+        });
         return ResponseEntity.ok(customers);
     }
 

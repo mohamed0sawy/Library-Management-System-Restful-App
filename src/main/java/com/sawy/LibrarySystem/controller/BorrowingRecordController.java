@@ -22,6 +22,10 @@ public class BorrowingRecordController {
                                                                         @RequestParam(defaultValue = "id") String sortBy,
                                                                         @RequestParam(defaultValue = "asc") String sortOrder) {
         Page<BorrowingRecord> borrowingRecords = borrowingRecordService.getAllBorrowingRecords(page, size, sortBy, sortOrder);
+        borrowingRecords.getContent().forEach(record -> {
+            record.setCustomerID(record.getCustomer().getId());
+            record.setBookID(record.getBook().getId());
+        });
         return ResponseEntity.ok(borrowingRecords);
     }
 

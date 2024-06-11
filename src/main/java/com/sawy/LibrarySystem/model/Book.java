@@ -1,6 +1,8 @@
 package com.sawy.LibrarySystem.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -39,9 +41,11 @@ public class Book {
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = true)
+    @JsonIgnoreProperties("books")
     private Author author;
 
     @OneToMany(mappedBy = "book")
+    @JsonIgnoreProperties({"customer", "book"})
     private List<BorrowingRecord> borrowingRecords;
 
     public Book(String title, String isbn, LocalDate publicationDate, String genre, boolean available, Long authorID) {

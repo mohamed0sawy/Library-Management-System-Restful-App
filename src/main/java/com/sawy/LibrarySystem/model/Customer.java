@@ -1,5 +1,6 @@
 package com.sawy.LibrarySystem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -34,6 +35,7 @@ public class Customer {
     private String password;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"customer", "book"})
     private List<BorrowingRecord> borrowingRecords;
 
     public Customer(String name, String email, String address, String phoneNumber, String password) {
