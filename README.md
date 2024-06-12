@@ -20,7 +20,7 @@ It provides endpoints to perform CRUD (Create, Read, Update, Delete) operations 
 - Swagger.
 
 # Endpoints
-**`NOTE`** please use the swagger file attached (Sawy-LibraryAPI-swagger) to explore the endpoints.
+**`NOTE`** please use the swagger file attached (LibraryAPI-1.0.0-swagger.yaml) to explore the endpoints.
 
 1- **Authors:**
 - `GET /authors`: Retrieve all authors.
