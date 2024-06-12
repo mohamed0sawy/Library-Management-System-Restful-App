@@ -4,6 +4,7 @@ import com.sawy.LibrarySystem.model.Book;
 import com.sawy.LibrarySystem.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,12 +65,19 @@ public class BookController {
                                                   @RequestParam(defaultValue = "10") int size,
                                                   @RequestParam(defaultValue = "id") String sortBy,
                                                   @RequestParam(defaultValue = "asc") String sortOrder) {
+        // Check if no parameters are sent
         if ((title == null || title.isEmpty()) && (author == null || author.isEmpty()) && (isbn == null || isbn.isEmpty())) {
-            // no parameters provided, return all books
-            return ResponseEntity.ok(bookService.getAllBooks(page, size, sortBy, sortOrder));
+            return ResponseEntity.badRequest().build();
         }
 
-        // Search based on the provided parameters, the first one will be processed first and ignore what following
+        // Check if more than one parameter is provided
+        if ((title != null && !title.isEmpty()) && ((author != null && !author.isEmpty()) || (isbn != null && !isbn.isEmpty())) ||
+                ((author != null && !author.isEmpty()) && ((title != null && !title.isEmpty()) || (isbn != null && !isbn.isEmpty()))) ||
+                ((isbn != null && !isbn.isEmpty()) && ((title != null && !title.isEmpty()) || (author != null && !author.isEmpty())))) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        // Search based on the provided parameter
         Page<Book> books;
         if (title != null && !title.isEmpty()) {
             books = bookService.searchBooksByTitle(title, page, size, sortBy, sortOrder);

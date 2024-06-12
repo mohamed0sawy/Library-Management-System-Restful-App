@@ -4,6 +4,7 @@ import com.sawy.LibrarySystem.model.BorrowingRecord;
 import com.sawy.LibrarySystem.service.BorrowingRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,10 +61,17 @@ public class BorrowingRecordController {
                                                                         @RequestParam(defaultValue = "10") int size,
                                                                         @RequestParam(defaultValue = "id") String sortBy,
                                                                         @RequestParam(defaultValue = "asc") String sortOrder) {
+        // Check if no parameters are provided
         if (userId == null && bookId == null) {
-            return ResponseEntity.ok(borrowingRecordService.getAllBorrowingRecords(page, size, sortBy, sortOrder));
+            return ResponseEntity.badRequest().build();
         }
 
+        // Check if more than one parameter is provided
+        if ((userId != null && bookId != null) || (userId != null && userId.toString().isEmpty()) || (bookId != null && bookId.toString().isEmpty())) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        // Search based on the provided parameter
         Page<BorrowingRecord> borrowingRecords;
         if (userId != null) {
             borrowingRecords = borrowingRecordService.getBorrowingRecordsByCustomerId(userId, page, size, sortBy, sortOrder);
